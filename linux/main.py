@@ -1,17 +1,17 @@
-from constants import *
+from constants import CACHE_PATH
 from app import App
 
-import install_linux_requirements
+# import install_linux_requirements
 import os
 
-def prepare():
-	# install_linux_requirements.run()
-	if not os.path.isdir(CACHE_PATH):
-		os.makedirs(CACHE_PATH)
+
+def _prepare():
+    # install_linux_requirements.run()
+    if not os.path.isdir(CACHE_PATH):
+        os.makedirs(CACHE_PATH)
 
 
 if __name__ == "__main__":
-	prepare()
+    _prepare()
 
-	App().run()
-
+    App().run()

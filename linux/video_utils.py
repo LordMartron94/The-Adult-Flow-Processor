@@ -1,7 +1,7 @@
 import os
-import shutil
 from datetime import timedelta
-from file_parser import FileParser
+import subprocess
+from utils.file_parser import FileParser
 from ffmpeg_api import FfmpegAPI
 from constants import *
 
@@ -64,7 +64,7 @@ class VideoUtils:
                 tempf.write(f"file \'file:{file}\'\n")
 
         cmd = [
-            f'ffmpeg', '-y', '-f', 'concat', '-safe', '0', '-i', temp_file, '-c', 'copy', f"{output_file_path}"
+            f'ffmpeg', '-y', '-f', 'concat', '-safe', '0', '-i', DATA_STREAM_PATH, '-c', 'copy', f"{output_file_path}"
         ]
         print(cmd)
         process = subprocess.run(cmd, capture_output=True, text=True)
