@@ -126,3 +126,6 @@ dmypy.json
 # IDE
 *.sublime-project
 *.sublime-workspace
+
+# Project SPECIFIC
+CACHE/
