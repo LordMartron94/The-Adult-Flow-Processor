@@ -1,8 +1,8 @@
 import os
 from datetime import timedelta
 import subprocess
-from utils.file_parser import FileParser
-from ffmpeg_api import FfmpegAPI
+from src.utils.file_parser import FileParser
+from src.ffmpeg_api import FfmpegAPI
 from constants import *
 
 class VideoUtils:
@@ -56,7 +56,7 @@ class VideoUtils:
             merged_file_path (str): The path to the merged video file.
             burn (bool): Whether to burn timestamps onto the contact sheet.
         """
-        self._api.create_contact_sheet(merged_file_path, merged_file_path.replace('.mkv', '.jpg'), burn)
+        self._api.create_contact_sheet(merged_file_path, merged_file_path.replace(MERGED_VIDEO_EXTENSION, '.jpg'), burn)
 
     def _concat_segments(self, segments, output_file_path: str):
         with open(DATA_STREAM_PATH, 'w') as tempf:
@@ -91,7 +91,7 @@ class VideoUtils:
         """
         start_datetime = self._file_parser.extract_datetime_from_filename(segments[0]).strftime('%Y-%m-%d %H:%M:%S')
         end_datetime = (self._file_parser.extract_datetime_from_filename(segments[-1]) + timedelta(seconds=self.get_video_duration(segments[-1]))).strftime('%Y-%m-%d %H:%M:%S')
-        output_file_name = f'{model_name}, START {start_datetime}, END {end_datetime}.mkv'.replace(':', '.')
+        output_file_name = f'{model_name}, START {start_datetime}, END {end_datetime}{MERGED_VIDEO_EXTENSION}'.replace(':', '.')
         os.makedirs(os.path.join(FINAL_DESTINATION_ROOT, model_name, "MERGED"), exist_ok=True)
         output_file_path = os.path.join(FINAL_DESTINATION_ROOT, model_name, "MERGED", output_file_name).replace('\\', '/')
         

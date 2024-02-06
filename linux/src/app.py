@@ -1,9 +1,9 @@
 import shutil
 import time
 import os
-from video_utils import VideoUtils
-from utils.time_utils import TimeUtils, TimeFormat
-from utils.file_parser import FileParser
+from src.video_utils import VideoUtils
+from src.utils.time_utils import TimeUtils, TimeFormat
+from src.utils.file_parser import FileParser
 from constants import *
 
 
