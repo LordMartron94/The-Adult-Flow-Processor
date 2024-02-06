@@ -67,7 +67,7 @@ class App:
 		_end_time = time.time()
 		_elapsed_time = _end_time - _start_time
 
-		_time_formatted = self._time_utils.format_time(_elapsed_time, TimeFormat.Dynamic)
+		_time_formatted = self._time_utils.format_time(_elapsed_time, TimeFormat.Dynamic, round_digits=4)
 
 		print(" ")
 		print(f"It took {_time_formatted} to merge all possible segments for model {model_name}.")    
@@ -126,7 +126,7 @@ class App:
 		time_formatted = self._time_utils.format_time(elapsed_time, TimeFormat.HMS)
 		
 		if elapsed_time > 0:
-			print(f"Avg {self._time_utils.format_time(elapsed_time / num_models, TimeFormat.Dynamic)} per model!")
+			print(f"Avg {self._time_utils.format_time(elapsed_time / num_models, TimeFormat.Dynamic, round_digits=4)} per model!")
 
 		print(" ")
 		print(f"It took {time_formatted} to merge all possible segments for every model.")
