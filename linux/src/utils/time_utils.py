@@ -1,6 +1,13 @@
 from enum import Enum
 
 class TimeFormat(Enum):
+    """
+    - Dynamic: formats in the smallest possible way.
+    - HMS: formats as HH:MM:SS
+    - MS: formats as MM:SS
+    - S: formats as SS
+    """
+    Dynamic = 'Dynamic'
     HMS = 'HMS'
     MS = 'MS'
     S = 'S'
@@ -12,6 +19,7 @@ class TimeUtils:
 
     def __init__(self):
         self._formatters = {
+            TimeFormat.Dynamic: self._format_dynamic,
             TimeFormat.HMS: self._format_hours_minutes_seconds,
             TimeFormat.MS: self._format_minutes_seconds,
             TimeFormat.S: self._format_seconds
@@ -33,6 +41,13 @@ class TimeUtils:
             raise ValueError(f"Invalid format type. Available options: {', '.join(f.value for f in TimeFormat)}")
         
         return formatter(total_seconds)
+    
+    def _format_dynamic(self, total_seconds):
+        if total_seconds >= 3600:
+            return self._format_hours_minutes_seconds(total_seconds)
+        if total_seconds >= 60:
+            return self._format_minutes_seconds(total_seconds)
+        return self._format_seconds(total_seconds)
 
     def _format_hours_minutes_seconds(self, total_seconds):
         hours = int(total_seconds / 3600)
