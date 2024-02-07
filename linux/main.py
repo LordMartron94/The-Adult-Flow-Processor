@@ -8,8 +8,6 @@ import os
 
 
 def _prepare():
-    print(f"PATH: {sys.path}")
-
     # install_linux_requirements.run()
     if not os.path.isdir(CACHE_PATH):
         os.makedirs(CACHE_PATH)

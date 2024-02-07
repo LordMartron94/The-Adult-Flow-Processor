@@ -25,7 +25,7 @@ class VideoUtils:
             float: The time difference in seconds between the two videos.
         """
         start_time_file1 = self._file_parser.extract_datetime_from_filename(video_one_path)
-        end_time_file1 = start_time_file1 + timedelta(seconds=self.get_video_duration(video_one_path))
+        end_time_file1 = start_time_file1 + timedelta(seconds=self._api.get_video_duration(video_one_path))
         start_time_file2 = self._file_parser.extract_datetime_from_filename(video_two_path)
         
         time_diff = (start_time_file2 - end_time_file1).total_seconds()
@@ -56,7 +56,7 @@ class VideoUtils:
             merged_file_path (str): The path to the merged video file.
             burn (bool): Whether to burn timestamps onto the contact sheet.
         """
-        self._api.create_contact_sheet(merged_file_path, merged_file_path.replace(MERGED_VIDEO_EXTENSION, '.jpg'), burn)
+        self._api.create_contact_sheet_for_video(merged_file_path, merged_file_path.replace(MERGED_VIDEO_EXTENSION, '.jpg'), burn)
 
     def _concat_segments(self, segments, output_file_path: str):
         with open(DATA_STREAM_PATH, 'w') as tempf:
@@ -90,13 +90,13 @@ class VideoUtils:
             burn (bool): Whether to burn timestamps onto the contact sheet.
         """
         start_datetime = self._file_parser.extract_datetime_from_filename(segments[0]).strftime('%Y-%m-%d %H:%M:%S')
-        end_datetime = (self._file_parser.extract_datetime_from_filename(segments[-1]) + timedelta(seconds=self.get_video_duration(segments[-1]))).strftime('%Y-%m-%d %H:%M:%S')
+        end_datetime = (self._file_parser.extract_datetime_from_filename(segments[-1]) + timedelta(seconds=self._api.get_video_duration(segments[-1]))).strftime('%Y-%m-%d %H:%M:%S')
         output_file_name = f'{model_name}, START {start_datetime}, END {end_datetime}{MERGED_VIDEO_EXTENSION}'.replace(':', '.')
         os.makedirs(os.path.join(FINAL_DESTINATION_ROOT, model_name, "MERGED"), exist_ok=True)
         output_file_path = os.path.join(FINAL_DESTINATION_ROOT, model_name, "MERGED", output_file_name).replace('\\', '/')
         
         # Check if merging was successful before proceeding with deletion
-        if self.concat_segments(segments, output_file_path):
+        if self._concat_segments(segments, output_file_path):
             if delete:
                 for f in segments:
                     if os.path.exists(f):

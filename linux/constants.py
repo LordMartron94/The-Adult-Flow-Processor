@@ -10,4 +10,4 @@ MERGED_VIDEO_EXTENSION: str = ".mp4"
 
 SHEET = True
 BURN = True
-DELETE = True
+DELETE = False

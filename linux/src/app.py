@@ -25,6 +25,7 @@ class App:
 				print(f"Moved '{os.path.basename(file)}' to 'Couldn't MERGE' directory.")
 			except Exception as e:
 				print(f"Error while moving file '{os.path.basename(file)}' to 'Couldn't MERGE' directory: {e}")
+				raise e
 
 	def process_current_files(self, current_segments, model_name, directory_path, delete, sheet, burn, loose_segment_directory_path):
 		if len(current_segments) >= 2:
@@ -102,6 +103,15 @@ class App:
 
 
 	def run(self):
+		# ==== TESTING ====
+
+		# self._video_utils._create_contact_sheet_for_merged_file("/mnt/nas/5TB WD External/Media Library/Porn/Utility Tests/4girls4you/MERGED/4girls4you, START 2024-01-10 19.28.35, END 2024-01-10 20.02.32.mp4", True)
+		# exit()
+
+
+		# ==== STOP TESTING ====
+
+
 		directory_path = ORIGINAL_LOCATION_PATH
 
 		start_time = time.time()
