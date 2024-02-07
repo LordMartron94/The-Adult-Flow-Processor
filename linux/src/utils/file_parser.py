@@ -1,11 +1,12 @@
 from datetime import datetime
+from pathlib import Path
 
 class FileParser:
-    """A class for parsing file names and extracting date and time information."""
+    """A class for parsing file names."""
 
     def __init__(self):
         """Initialize the FileParser instance."""
-        pass
+        ...
 
     def extract_datetime_from_filename(self, filename: str) -> str:
         """
@@ -20,6 +21,7 @@ class FileParser:
         Note:
             The expected filename format is "YYYY-MM-DD_HH-MM-SS_other_parts.ext".
         """
+        filename = str(Path(filename).name)
         parts = filename.split('_')
         if len(parts) >= 2:
             date_str, time_str = parts[-3], parts[-2]
