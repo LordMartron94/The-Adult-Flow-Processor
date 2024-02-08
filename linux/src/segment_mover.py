@@ -40,9 +40,11 @@ class SegmentMover:
 			shutil.move(segment, segment_path)
 
 			if not REGEN_SHEETS:
-				shutil.move(contact_sheet, Path(output_directory, contact_sheet.name))
+				if Path(contact_sheet).exists() and Path(contact_sheet).is_file():
+					shutil.move(contact_sheet, Path(output_directory, contact_sheet.name))
 			else:
-				os.remove(contact_sheet)
+				if Path(contact_sheet).exists() and Path(contact_sheet).is_file():
+					os.remove(contact_sheet)
 				self._api.create_contact_sheet_for_video(segment_path, BURN, str(segment_path).replace('.mp4', '.png'))
 
 			print(f"Moved '{segment.name}' to 'Couldn't MERGE' directory.")
