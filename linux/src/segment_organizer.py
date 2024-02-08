@@ -64,7 +64,7 @@ class SegmentOrganizer:
 		"""
 		sorted_segments: List[Path] = self._segment_sorter.sort_segments(model_directory)
 		sorted_segments = self._verify_videos(sorted_segments)
-		sorted_segments = self._filter_videos(sorted_segments)
+		sorted_segments = self._filter_videos(sorted_segments, model_name)
 		return self._split_at_gaps(sorted_segments)
 
 
