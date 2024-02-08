@@ -31,7 +31,8 @@ class VideoHandler:
         
         time_diff = (start_time_file2 - end_time_file1).total_seconds()
 
-        print(f"Files: {video_one_path.name}, {video_two_path.name}\nTime difference: {time_diff}")
+        if DEBUGGING:
+            print(f"Files: {video_one_path.name}, {video_two_path.name}\nTime difference: {time_diff}")
 
         return time_diff
 

@@ -45,6 +45,8 @@ class App:
 		num_models = len(model_directories)
 
 		for _, model in model_directories:
+			if model != "ariel_zeo1": continue
+
 			self._model_processor.merge_model_streams(model, SHEET, BURN, DELETE)
 
 		end_time = time.time()

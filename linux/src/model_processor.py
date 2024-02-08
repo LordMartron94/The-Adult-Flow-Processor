@@ -5,6 +5,7 @@ from typing import List
 
 from constants import FINAL_DESTINATION_ROOT, ORIGINAL_LOCATION_PATH
 from common.handlers.file_parser import FileParser
+from common.handlers.file_handler import FileHandler
 from src.stream_merger import StreamMerger
 from src.segment_mover import SegmentMover
 from src.segment_organizer import SegmentOrganizer
@@ -23,10 +24,11 @@ class ModelProcessor:
 		_api: FFMPEGAPI = FFMPEGAPI()
 		_video_handler: VideoHandler = VideoHandler()
 		_file_parser: FileParser = FileParser()
+		_file_handler: FileHandler = FileHandler()
 
 		self._time_utils: TimeUtils = TimeUtils()
 		self._segment_mover: SegmentMover = SegmentMover(_video_handler)
-		self._segment_organizer: SegmentOrganizer = SegmentOrganizer(_file_parser, _video_handler)
+		self._segment_organizer: SegmentOrganizer = SegmentOrganizer(_file_parser, _video_handler, _file_handler)
 		self._stream_merger: StreamMerger = StreamMerger(_api, _video_handler, _file_parser, self._move_to_loose_segments)
 
 	def _move_to_loose_segments(self, segments: List[Path], loose_segment_directory_path: Path):

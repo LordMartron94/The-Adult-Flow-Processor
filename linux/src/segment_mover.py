@@ -11,7 +11,7 @@ class SegmentMover:
 		self._video_handler: VideoHandler = video_handler
 
 	def move(self, segment: Path, output_directory: Path):
-		if not Path(output_directory).is_dir:
+		if not Path(output_directory).is_dir():
 			os.makedirs(output_directory, exist_ok=True)
 
 		contact_sheet: Path = self._video_handler.get_accompanying_contact_sheet_path(segment)

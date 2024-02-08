@@ -2,12 +2,14 @@ import os
 from pathlib import Path
 from typing import Dict, List
 from common.handlers.file_parser import FileParser
+from common.handlers.file_handler import FileHandler
 
 
 class SegmentSorter:
 	"""Stream sorter algorithm class."""
-	def __init__(self, file_parser: FileParser) -> None:
+	def __init__(self, file_parser: FileParser, file_handler: FileHandler) -> None:
 		self._file_parser: FileParser = file_parser
+		self._file_handler: FileHandler = file_handler
 
 	def sort_segments(self, segment_directory: Path) -> List[Path]:
 		"""
