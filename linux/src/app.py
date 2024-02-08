@@ -45,7 +45,7 @@ class App:
 		num_models = len(model_directories)
 
 		for _, model in model_directories:
-			if model != "arya_ruiz": continue
+			# if model != "dollybarks": continue  # For testing purposes
 
 			self._model_processor.merge_model_streams(model, SHEET, BURN, DELETE)
 

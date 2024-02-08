@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from subprocess import CompletedProcess
 from typing import Union
-from constants import DATA_STREAM_PATH
+from constants import DATA_STREAM_PATH, SHOW_MERGE_COMMANDS
 
 from src.ffmpeg_handling.internal.ffmpeg_command_helper import FFMPEGCommandHelper
 
@@ -53,7 +53,7 @@ class VideoHandler:
             f"{output_file_path}"
         ]
 
-        results: CompletedProcess = self._command_helper.execute_command(cmd)
+        results: CompletedProcess = self._command_helper.execute_command(cmd, output_override=SHOW_MERGE_COMMANDS)
         return results.returncode == 0
     
     def video_valid(self, video_file_path: Path, robust_check=False) -> bool:

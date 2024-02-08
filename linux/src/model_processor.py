@@ -31,14 +31,14 @@ class ModelProcessor:
 
 		self._template_parser = TemplateParser()
 		self._time_utils: TimeUtils = TimeUtils()
-		self._segment_mover: SegmentMover = SegmentMover(_video_handler)
 		self._video_factory: VideoFactory = VideoFactory(_file_parser, _api)
+		self._segment_mover: SegmentMover = SegmentMover(_video_handler, self._template_parser, self._video_factory, _api)
 		self._segment_organizer: SegmentOrganizer = SegmentOrganizer(_file_parser, _video_handler, _file_handler, _api)
 		self._stream_merger: StreamMerger = StreamMerger(_api, _video_handler, self._video_factory, self._template_parser, self._move_to_loose_segments)
 
-	def _move_to_loose_segments(self, segments: List[Path], loose_segment_directory_path: Path):
+	def _move_to_loose_segments(self, segments: List[Path], loose_segment_directory_path: Path, model_name: str):
 		for segment in segments:
-			self._segment_mover.move(segment, loose_segment_directory_path)
+			self._segment_mover.move(segment, loose_segment_directory_path, model_name)
 
 	def _print_time_passed(self, start_time: float, end_time: float, model_name: str):
 		elapsed_time = end_time - start_time
@@ -56,6 +56,8 @@ class ModelProcessor:
 		segment_directory: Path = Path(ORIGINAL_LOCATION_PATH, model_name)
 		organized_segments: List[Path] = self._segment_organizer.organize(segment_directory)
 
+		print(f"Processing: {model_name} from {segment_directory}")
+
 		if len(organized_segments) < 1:
 			end_time = time.time()
 			self._print_time_passed(start_time, end_time, model_name)
@@ -71,7 +73,7 @@ class ModelProcessor:
 				self._stream_merger.merge_stream(stream, model_name, make_sprite_sheet, burn_timestamps_in_sheet, delete_original_files)
 			else:
 				video: VideoModel = self._video_factory.create(model_name, stream[0])
-				self._move_to_loose_segments(stream, self._template_parser.get_output_directory_for_video(video))
+				self._move_to_loose_segments(stream, self._template_parser.get_output_directory_for_video(video), model_name)
 
 		end_time = time.time()
 		self._print_time_passed(start_time, end_time, model_name)

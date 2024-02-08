@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import Any, Dict
-from constants import FINAL_DESTINATION_ROOT, FINAL_DIRECTORY_STRUCTURE, MERGE_NAME_TEMPLATE
+from constants import FINAL_DESTINATION_ROOT, FINAL_DIRECTORY_STRUCTURE, LOOSE_SEGMENT_TEMPLATE, MERGE_NAME_TEMPLATE
 from src.model.video_model import VideoModel
 
 
@@ -33,6 +33,15 @@ class TemplateParser:
 		possibilities = self._formulate_possibilities(stream)
 
 		populated_template = MERGE_NAME_TEMPLATE
+		for variable, data in possibilities.items():
+			populated_template = populated_template.replace(variable, str(data))
+		return populated_template
+
+	def get_video_name(self, video: VideoModel) -> str:
+		"""Returns the video name based on the user provided template."""
+		possibilities = self._formulate_possibilities(video)
+
+		populated_template = LOOSE_SEGMENT_TEMPLATE
 		for variable, data in possibilities.items():
 			populated_template = populated_template.replace(variable, str(data))
 		return populated_template

@@ -21,11 +21,12 @@ class FFMPEGAPI:
 			video_paths_in_sequence: list[str],
 			delete_original_files: bool,
 			output_file_path: str,
-			fail_function: Callable[[List[str]], str]):
+			fail_function: Callable[[List[str], str, str], None],
+			model_name: str):
 		merge_successful: bool = self._video_handler.merge_stream_segments(video_paths_in_sequence, output_file_path)
 		
 		if not merge_successful:
-			fail_function(video_paths_in_sequence, output_file_path)
+			fail_function(video_paths_in_sequence, output_file_path, model_name)
 			return
 
 		if delete_original_files:

@@ -21,7 +21,7 @@ class StreamMerger:
 		) -> None:
 		self._api: FFMPEGAPI = ffmpeg_api
 		self._video_handler: VideoHandler = video_handler
-		self._move_to_loose_segments: Callable[[list[str], str], None] = move_to_loose_segments
+		self._move_to_loose_segments: Callable[[list[str], str, str], None] = move_to_loose_segments
 		self._template_parser: TemplateParser = template_parser
 		self._video_factory: VideoFactory = video_factory
 
@@ -39,14 +39,17 @@ class StreamMerger:
 		# Combine the output directory and file name to get the full output path
 		return Path(output_directory, output_name + MERGED_VIDEO_EXTENSION)
 
-	def _handle_merge_failure(self, segments: list[str], merge_path: str):
+	def _handle_merge_failure(self, segments: list[str], merge_path: str, model_name: str):
 		print(f"Error merging: '{merge_path}'! Will move to loose segments folder!")
 		for segment in segments:
-			self._move_to_loose_segments(segment, merge_path)
+			self._move_to_loose_segments(segment, merge_path, model_name)
 
 	def merge_stream(self, segments: list[Path], model_name: str, make_sprite_sheet: bool, burn_timestamps_in_sheet: bool, delete_original_files: bool):
 		final_destination_path = self._get_stream_output_path(segments, model_name)
-		self._api.merge_videos_together(segments, delete_original_files, final_destination_path, fail_function=self._handle_merge_failure)
+
+		print(f"Merging from {segments[0].name} until {segments[-1].name}! -- Going to: {final_destination_path}!")
+
+		self._api.merge_videos_together(segments, delete_original_files, final_destination_path, model_name=model_name, fail_function=self._handle_merge_failure)
 
 		if make_sprite_sheet:
 			self._api.create_contact_sheet_for_video(
