@@ -1,5 +1,3 @@
-import sys
-
 from constants import CACHE_PATH
 from src.app import App
 

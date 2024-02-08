@@ -1,4 +1,3 @@
-from cgitb import lookup
 from datetime import timedelta
 import os
 from pathlib import Path
@@ -6,13 +5,14 @@ import pprint
 import shutil
 import time
 from typing import Dict, List
+from common.collection_extensions import CollectionExtensions
 
 from constants import FINAL_DESTINATION_ROOT, MAX_DIFFERENCE_BETWEEN_SEGMENTS, MERGED_VIDEO_EXTENSION, ORIGINAL_LOCATION_PATH
-from src.utils.file_parser import FileParser
+from common.handlers.file_parser import FileParser
 from src.ffmpeg_handling.ffmpeg_api import FFMPEGAPI
-from src.utils.file_handler import FileHandler
-from src.utils.time_format import TimeFormat
-from src.utils.time_utils import TimeUtils
+from common.handlers.file_handler import FileHandler
+from common.time_format import TimeFormat
+from common.time_utils import TimeUtils
 from src.video_handler import VideoHandler
 
 
@@ -42,23 +42,17 @@ class ModelProcessor:
 		sorted_segments = sorted(segments.items(), key=lambda item: item[1])
 		sorted_paths = [path for path, _ in sorted_segments]
 		return sorted_paths
+	
+	def _split_at_gaps(self, segments: list[str]) -> list:
+		def gap_too_large(before, after) -> bool: 
+			return self._video_handler.get_time_difference_between_videos(before, after) <= MAX_DIFFERENCE_BETWEEN_SEGMENTS
 
-	def _organize_streams(self, sorted_segments: List[str]) -> List[List]:
-		organized_streams: List[List] = []
-		current_stream: List[str] = [sorted_segments[0]]
-
-		for segment in sorted_segments[1:]:  # start from index 1 to skip first segment
-			if self._video_handler.get_time_difference_between_videos(current_stream[-1], segment) <= MAX_DIFFERENCE_BETWEEN_SEGMENTS:
-				current_stream.append(segment)
-			else:
-				organized_streams.append(list(current_stream))
-				current_stream = [segment]
-
-		if current_stream:  # if there are segments left in the current stream
-			organized_streams.append(list(current_stream))
-
-		return organized_streams
-
+		return list(
+			CollectionExtensions.split_between(
+				gap_too_large, 
+				segments
+			)
+		)
 	
 	def _get_stream_output_path(self, stream_segments: list[str], model_name: str) -> str:
 		output_directory = Path(FINAL_DESTINATION_ROOT, model_name, "MERGED")
@@ -115,8 +109,8 @@ class ModelProcessor:
 			self._print_time_passed(start_time, end_time, model_name)
 			return
 
-		organized_streams: List[List] = self._organize_streams(sorted_segments)
-		pprint.pp(organized_streams)
+		organized_streams: List[List] = self._split_at_gaps(sorted_segments)
+		# pprint.pp(organized_streams)
 
 		for stream in organized_streams:
 			if len(stream) > 1:

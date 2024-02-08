@@ -1,7 +1,7 @@
 import os
 from datetime import timedelta
 from pathlib import Path
-from src.utils.file_parser import FileParser
+from common.handlers.file_parser import FileParser
 from src.ffmpeg_handling.ffmpeg_api import FFMPEGAPI
 from constants import *
 

@@ -1,8 +1,8 @@
 from pathlib import Path
 import time
 from src.model_processor import ModelProcessor
-from src.utils.folder_handler import FolderHandler
-from src.utils.time_utils import TimeUtils, TimeFormat
+from common.handlers.folder_handler import FolderHandler
+from common.time_utils import TimeUtils, TimeFormat
 from constants import *
 
 
@@ -37,7 +37,9 @@ class App:
 		model_directories = self.sort_folders_by_oldest_stream(model_directories)
 		num_models = len(model_directories)
 
-		for model_directory, model in model_directories:
+		for _, model in model_directories:
+			if model != "aria_petit": continue
+
 			self._model_processor.merge_model_streams(model, SHEET, BURN, DELETE)
 
 		end_time = time.time()

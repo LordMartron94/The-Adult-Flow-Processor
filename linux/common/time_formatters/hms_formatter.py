@@ -1,4 +1,4 @@
-from src.utils.time_formatters.time_formatter import ABCTimeFormatter
+from common.time_formatters.time_formatter import ABCTimeFormatter
 
 
 class HMSFormatter(ABCTimeFormatter):

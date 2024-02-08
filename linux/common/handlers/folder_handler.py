@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from src.utils.file_handler import FileHandler
+from common.handlers.file_handler import FileHandler
 
 
 class FolderHandler:

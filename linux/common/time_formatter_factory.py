@@ -1,8 +1,8 @@
-from src.utils.time_format import TimeFormat
-from src.utils.time_formatters.hms_formatter import HMSFormatter
-from src.utils.time_formatters.ms_formatter import MSFormatter
-from src.utils.time_formatters.s_formatter import SFormatter
-from src.utils.time_formatters.time_formatter import ABCTimeFormatter
+from common.time_format import TimeFormat
+from common.time_formatters.hms_formatter import HMSFormatter
+from common.time_formatters.ms_formatter import MSFormatter
+from common.time_formatters.s_formatter import SFormatter
+from common.time_formatters.time_formatter import ABCTimeFormatter
 
 
 class TimeFormatterFactory:

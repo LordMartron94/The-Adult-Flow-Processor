@@ -1,5 +1,4 @@
 import subprocess
-import getpass
 
 from constants import DEBUGGING
 
