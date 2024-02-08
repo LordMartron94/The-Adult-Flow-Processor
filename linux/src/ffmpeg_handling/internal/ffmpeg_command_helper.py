@@ -18,7 +18,10 @@ class FFMPEGCommandHelper:
 		result = subprocess.run(command, capture_output=display_output)
 		if result.returncode != 0:
 			print("Error executing command:")
-			print(f"Command: {' '.join(command)}")
+
+			if not DEBUGGING:
+				print(f"Command: {command}")
+				
 			error_lines = result.stderr.decode('utf-8').split('\n')
 			for line in error_lines:
 				print(line)

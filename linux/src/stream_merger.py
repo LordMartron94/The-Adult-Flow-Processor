@@ -1,9 +1,10 @@
-from datetime import timedelta
 import os
 from pathlib import Path
 from typing import Callable
-from constants import FINAL_DESTINATION_ROOT, MERGED_VIDEO_EXTENSION
-from common.handlers.file_parser import FileParser
+from constants import MERGED_VIDEO_EXTENSION
+from src.utility.video_factory import VideoFactory
+from src.model.video_model import VideoModel
+from src.utility.template_parser import TemplateParser
 from src.ffmpeg_handling.ffmpeg_api import FFMPEGAPI
 
 from src.video_handler import VideoHandler
@@ -14,37 +15,34 @@ class StreamMerger:
 	def __init__(self, 
 			  ffmpeg_api: FFMPEGAPI,
 			  video_handler: VideoHandler, 
-			  file_parser: FileParser,
+			  video_factory: VideoFactory,
+			  template_parser: TemplateParser,
 			  move_to_loose_segments: Callable[[list[str], str], None],
 		) -> None:
-		self._file_parser: FileParser = file_parser
 		self._api: FFMPEGAPI = ffmpeg_api
 		self._video_handler: VideoHandler = video_handler
 		self._move_to_loose_segments: Callable[[list[str], str], None] = move_to_loose_segments
+		self._template_parser: TemplateParser = template_parser
+		self._video_factory: VideoFactory = video_factory
 
-	def _get_stream_output_path(self, stream_segments: list[Path], model_name: str) -> str:
+	def _get_stream_output_path(self, stream_segments: list[Path], model_name: str) -> Path:
 		# Set the output directory path
-		output_directory = Path(FINAL_DESTINATION_ROOT, model_name, "MERGED")
+		stream: VideoModel = self._video_factory.create_stream(model_name, stream_segments[0], stream_segments[1])
+
+		output_directory: Path = self._template_parser.get_output_directory_for_video(stream)
+		output_name: str = self._template_parser.get_merge_name(stream)
 
 		# Create the output directory if it doesn't exist
 		if not output_directory.is_dir():
 			os.makedirs(output_directory, exist_ok=True)
 
-		# Extract start and end datetimes from the stream segments
-		start_datetime = self._file_parser.extract_datetime(stream_segments[0].name).strftime('%Y-%m-%d %H:%M:%S')
-		end_datetime = (self._file_parser.extract_datetime(stream_segments[-1].name) + timedelta(seconds=self._api.get_video_duration(stream_segments[-1]))).strftime('%Y-%m-%d %H:%M:%S')
-		
-		# Format the output file name
-		output_file_name = f'{model_name}, START {start_datetime}, END {end_datetime}{MERGED_VIDEO_EXTENSION}'.replace(':', '.')
-
 		# Combine the output directory and file name to get the full output path
-		return Path(output_directory, output_file_name)
-
+		return Path(output_directory, output_name + MERGED_VIDEO_EXTENSION)
 
 	def _handle_merge_failure(self, segments: list[str], merge_path: str):
 		print(f"Error merging: '{merge_path}'! Will move to loose segments folder!")
 		for segment in segments:
-			self._move_to_loose_segments(segment, Path(merge_path).parent.joinpath("Loose Segments"))
+			self._move_to_loose_segments(segment, merge_path)
 
 	def merge_stream(self, segments: list[Path], model_name: str, make_sprite_sheet: bool, burn_timestamps_in_sheet: bool, delete_original_files: bool):
 		final_destination_path = self._get_stream_output_path(segments, model_name)

@@ -1,6 +1,7 @@
 import os
 from datetime import timedelta
 from pathlib import Path
+from typing import Union
 from common.handlers.file_parser import FileParser
 from src.ffmpeg_handling.ffmpeg_api import FFMPEGAPI
 from constants import *
@@ -23,9 +24,12 @@ class VideoHandler:
 
         Returns:
             float: The time difference in seconds between the two videos.
+            None: The video file is corrupt and thus cannot be used.
         """
         start_time_file1 = self._file_parser.extract_datetime(video_one_path.name)
-        end_time_file1 = start_time_file1 + timedelta(seconds=self._api.get_video_duration(video_one_path))
+        duration_video_one = self._api.get_video_duration(video_one_path)
+
+        end_time_file1 = start_time_file1 + timedelta(seconds=duration_video_one)
 
         start_time_file2 = self._file_parser.extract_datetime(video_two_path.name)
         

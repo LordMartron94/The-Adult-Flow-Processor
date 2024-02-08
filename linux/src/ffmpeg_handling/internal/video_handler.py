@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from subprocess import CompletedProcess
 from typing import Union
@@ -27,7 +28,11 @@ class VideoHandler:
         ]
 
         output = self._command_helper.execute_command(command)
-        return float(output.stdout)
+        try:
+            return float(output.stdout)
+        except ValueError: # Invalid output, corrupt video!            
+            return None
+
     
     def merge_stream_segments(self, segments: list[str], output_file_path: str) -> bool:
         with open(DATA_STREAM_PATH, 'w') as data_stream_file:
@@ -50,3 +55,21 @@ class VideoHandler:
 
         results: CompletedProcess = self._command_helper.execute_command(cmd)
         return results.returncode == 0
+    
+    def video_valid(self, video_file_path: Path, robust_check=False) -> bool:
+        if not robust_check:
+            cmd = [
+                'ffprobe',
+                video_file_path
+            ]
+        else:
+            cmd = [
+                'ffmpeg',
+                '-i',
+                video_file_path,
+                '-f',
+                'null'
+            ]
+
+        results: CompletedProcess = self._command_helper.execute_command(cmd)
+        return results.returncode == 0        

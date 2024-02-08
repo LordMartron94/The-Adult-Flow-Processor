@@ -48,3 +48,10 @@ class FFMPEGAPI:
 
 	def get_video_duration(self, video_file_path: str) -> Union[float, None]:
 		return self._video_handler.get_video_duration(video_file_path)
+	
+	def video_valid(self, video_file_path: Path, robust_check=False) -> bool:
+		"""
+		Checks if a video file is valid through ffprobe. Returns true if valid.
+		Set robust_check to True if you want a more time consuming but robust video check.
+		"""
+		return self._video_handler.video_valid(video_file_path, robust_check)
