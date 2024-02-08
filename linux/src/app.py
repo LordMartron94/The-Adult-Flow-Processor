@@ -1,5 +1,6 @@
 from pathlib import Path
 import time
+from common.handlers.file_parser import FileParser
 from src.model_processor import ModelProcessor
 from common.handlers.folder_handler import FolderHandler
 from common.time_utils import TimeUtils, TimeFormat
@@ -20,6 +21,12 @@ class App:
 	def run(self):
 		# ==== TESTING ====
 
+		# tester = FileParser()
+		# results = tester.extract_datetime("aria_petit_2024-01-12_13-47-00_781.ts")
+
+		# print(f"Result: {results}")
+
+		# exit()
 		
 		# ==== STOP TESTING ====
 
@@ -38,8 +45,6 @@ class App:
 		num_models = len(model_directories)
 
 		for _, model in model_directories:
-			if model != "aria_petit": continue
-
 			self._model_processor.merge_model_streams(model, SHEET, BURN, DELETE)
 
 		end_time = time.time()

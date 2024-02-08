@@ -36,8 +36,8 @@ class ModelProcessor:
 			if not self._file_handler.is_mp4_file(segment_path):
 				continue
 
-			modified_time = self._file_handler.get_file_modified_date(segment_path)
-			segments[segment_path] = modified_time
+			stream_start = self._file_parser.extract_datetime(segment_path.name)
+			segments[segment_path] = stream_start
 		
 		sorted_segments = sorted(segments.items(), key=lambda item: item[1])
 		sorted_paths = [path for path, _ in sorted_segments]
@@ -45,7 +45,7 @@ class ModelProcessor:
 	
 	def _split_at_gaps(self, segments: list[str]) -> list:
 		def gap_too_large(before, after) -> bool: 
-			return self._video_handler.get_time_difference_between_videos(before, after) <= MAX_DIFFERENCE_BETWEEN_SEGMENTS
+			return self._video_handler.get_time_difference_between_videos(before, after) > MAX_DIFFERENCE_BETWEEN_SEGMENTS
 
 		return list(
 			CollectionExtensions.split_between(
@@ -54,14 +54,14 @@ class ModelProcessor:
 			)
 		)
 	
-	def _get_stream_output_path(self, stream_segments: list[str], model_name: str) -> str:
+	def _get_stream_output_path(self, stream_segments: list[Path], model_name: str) -> str:
 		output_directory = Path(FINAL_DESTINATION_ROOT, model_name, "MERGED")
 
 		if not Path(output_directory).is_dir():
 			os.makedirs(output_directory, exist_ok=True)
 		
-		start_datetime = self._file_parser.extract_datetime_from_filename(stream_segments[0]).strftime('%Y-%m-%d %H:%M:%S')
-		end_datetime = (self._file_parser.extract_datetime_from_filename(stream_segments[-1]) + timedelta(seconds=self._api.get_video_duration(stream_segments[-1]))).strftime('%Y-%m-%d %H:%M:%S')
+		start_datetime = self._file_parser.extract_datetime(stream_segments[0].name).strftime('%Y-%m-%d %H:%M:%S')
+		end_datetime = (self._file_parser.extract_datetime(stream_segments[-1].name) + timedelta(seconds=self._api.get_video_duration(stream_segments[-1]))).strftime('%Y-%m-%d %H:%M:%S')
 		output_file_name = f'{model_name}, START {start_datetime}, END {end_datetime}{MERGED_VIDEO_EXTENSION}'.replace(':', '.')
 
 		return Path(output_directory, output_file_name)
@@ -110,7 +110,9 @@ class ModelProcessor:
 			return
 
 		organized_streams: List[List] = self._split_at_gaps(sorted_segments)
-		# pprint.pp(organized_streams)
+		pprint.pp(organized_streams)
+
+		# exit()
 
 		for stream in organized_streams:
 			if len(stream) > 1:

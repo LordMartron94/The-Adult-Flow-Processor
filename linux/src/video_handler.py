@@ -13,23 +13,26 @@ class VideoHandler:
         self._file_parser: FileParser = FileParser()
         self._api: FFMPEGAPI = FFMPEGAPI()
 
-    def get_time_difference_between_videos(self, video_one_path: str, video_two_path: str) -> float:
+    def get_time_difference_between_videos(self, video_one_path: Path, video_two_path: Path) -> float:
         """
         Calculate the time difference between the end of the first video and the start of the second video.
 
         Args:
-            video_one_path (str): The path to the first video file.
-            video_two_path (str): The path to the second video file.
+            video_one_path (Path): The path to the first video file.
+            video_two_path (Path): The path to the second video file.
 
         Returns:
             float: The time difference in seconds between the two videos.
         """
-        start_time_file1 = self._file_parser.extract_datetime_from_filename(video_one_path)
+        start_time_file1 = self._file_parser.extract_datetime(video_one_path.name)
         end_time_file1 = start_time_file1 + timedelta(seconds=self._api.get_video_duration(video_one_path))
 
-        start_time_file2 = self._file_parser.extract_datetime_from_filename(video_two_path)
+        start_time_file2 = self._file_parser.extract_datetime(video_two_path.name)
         
         time_diff = (start_time_file2 - end_time_file1).total_seconds()
+
+        print(f"Files: {video_one_path.name}, {video_two_path.name}\nTime difference: {time_diff}")
+
         return time_diff
 
     def get_accompanying_contact_sheet_path(self, video_file_path: str) -> str:

@@ -13,8 +13,9 @@ class CollectionExtensions:
             items (iterable): The iterable to split into groups.
 
         Yields:
-            list: A list containing consecutive items from the input iterable that satisfy
-                the given predicate function.
+            list: A list containing consecutive elements from the input iterable 'items' 
+                where the predicate function 'pred' returns False for each consecutive pair 
+                of elements in the yielded list.
 
         Example:
             Consider an iterable of integers 'numbers' and a predicate function 'is_even'
