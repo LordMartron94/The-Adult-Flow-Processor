@@ -122,3 +122,15 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# IDE
+*.sublime-project
+*.sublime-workspace
+*.vscode/
+Stream Segment Merger.code-workspace
+
+# Project SPECIFIC
+CACHE/
+
+# personal
+todo.txt
