@@ -66,5 +66,3 @@ class SegmentOrganizer:
 		sorted_segments = self._verify_videos(sorted_segments)
 		sorted_segments = self._filter_videos(sorted_segments, model_name)
 		return self._split_at_gaps(sorted_segments)
-
-
