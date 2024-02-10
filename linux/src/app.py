@@ -26,6 +26,7 @@ class App:
 		# results = tester.extract_datetime("alodiefairall_2024-10-02_09-03-51_578.ts")
 
 		# print(f"Result: {results}")
+		# print("Test")
 
 		# exit()
 		

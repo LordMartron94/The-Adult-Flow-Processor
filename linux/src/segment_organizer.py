@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import List
 from common.collection_extensions import CollectionExtensions
 from common.handlers.file_parser import FileParser
-from constants import DELETE_CORRUPT_VIDEOS, MAX_DIFFERENCE_BETWEEN_SEGMENTS, MIN_VIDEO_AGE
+from constants import DELETE_CORRUPT_VIDEOS, MAX_DIFFERENCE_BETWEEN_SEGMENTS, MIN_SEGMENT_AGE_FOR_MERGE
 from common.handlers.file_handler import FileHandler
 from src.utility.video_factory import VideoFactory
 from src.model.video_model import VideoModel
@@ -46,13 +46,13 @@ class SegmentOrganizer:
 	
 	def _filter_videos(self, segments: List[Path], model_name: str) -> List[Path]:
 		"""Filters videos based on minimum age."""
-		if MIN_VIDEO_AGE == 0:
+		if MIN_SEGMENT_AGE_FOR_MERGE == 0:
 			return segments
 		
 		for segment in segments:
 			video: VideoModel = self._video_factory.create(model_name, segment)
 			time_diff = datetime.now() - video.start_date
-			if time_diff > timedelta(days=MIN_VIDEO_AGE):
+			if time_diff > timedelta(days=MIN_SEGMENT_AGE_FOR_MERGE):
 				segments.remove(segment)
 
 		return segments
