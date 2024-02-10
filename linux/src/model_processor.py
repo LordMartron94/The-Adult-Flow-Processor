@@ -33,7 +33,7 @@ class ModelProcessor:
 		self._time_utils: TimeUtils = TimeUtils()
 		self._video_factory: VideoFactory = VideoFactory(_file_parser, _api)
 		self._segment_mover: SegmentMover = SegmentMover(_video_handler, self._template_parser, self._video_factory, _api)
-		self._segment_organizer: SegmentOrganizer = SegmentOrganizer(_file_parser, _video_handler, _file_handler, _api)
+		self._segment_organizer: SegmentOrganizer = SegmentOrganizer(_file_parser, _video_handler, _file_handler, _api, self._video_factory)
 		self._stream_merger: StreamMerger = StreamMerger(_api, _video_handler, self._video_factory, self._template_parser, self._move_to_loose_segments)
 
 	def _move_to_loose_segments(self, segments: List[Path], loose_segment_directory_path: Path, model_name: str):
@@ -54,7 +54,7 @@ class ModelProcessor:
 		start_time = time.time()
 		
 		segment_directory: Path = Path(ORIGINAL_LOCATION_PATH, model_name)
-		organized_segments: List[Path] = self._segment_organizer.organize(segment_directory)
+		organized_segments: List[Path] = self._segment_organizer.organize(segment_directory, model_name)
 
 		print(f"Processing: {model_name} from {segment_directory}")
 
