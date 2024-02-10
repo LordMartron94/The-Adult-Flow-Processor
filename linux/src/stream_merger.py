@@ -27,7 +27,7 @@ class StreamMerger:
 
 	def _get_stream_output_path(self, stream_segments: list[Path], model_name: str) -> Path:
 		# Set the output directory path
-		stream: VideoModel = self._video_factory.create_stream(model_name, stream_segments[0], stream_segments[1])
+		stream: VideoModel = self._video_factory.create_stream(model_name, stream_segments[0], stream_segments[-1])
 
 		output_directory: Path = self._template_parser.get_output_directory_for_video(stream)
 		output_name: str = self._template_parser.get_merge_name(stream)

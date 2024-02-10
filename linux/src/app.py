@@ -1,6 +1,7 @@
 import datetime
 from pathlib import Path
 import time
+from common.handlers.file_parser import FileParser
 from src.model_processor import ModelProcessor
 from common.handlers.folder_handler import FolderHandler
 from common.time_utils import TimeUtils, TimeFormat
@@ -21,8 +22,8 @@ class App:
 	def run(self):
 		# ==== TESTING ====
 
-		# tester = TemplateParser()
-		# results = tester.get_merge_name(Stream("aria_petit", datetime.datetime(year=2024, month=2, day=8, hour=7, minute=39, second=59), datetime.datetime(year=2024, month=2, day=8, hour=14, minute=27, second=44)))
+		# tester = FileParser()
+		# results = tester.extract_datetime("alodiefairall_2024-10-02_09-03-51_578.ts")
 
 		# print(f"Result: {results}")
 

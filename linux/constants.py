@@ -10,6 +10,9 @@ CACHE_PATH: str = os.path.join(PROJECT_ROOT, "CACHE")
 # ===== CONFIG =====
 
 SHOW_MERGE_COMMANDS = True  # Output merge progress and command :)
+MIN_VIDEO_AGE = 0  # Minimal age of a segment before it is processed into merging (in days).
+				   # This setting can help to prevent streams merging while not all segments are in the directory yet.
+				   # Set to 0 to disable.
 
 # ---- PATHS ----
 DATA_STREAM_PATH: str = "/mnt/nas/5TB WD External/Media Library/Porn/Porn Utilities/Stream Segment Merger/linux/CACHE/data_stream.txt"

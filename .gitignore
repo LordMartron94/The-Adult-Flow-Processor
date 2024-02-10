@@ -127,7 +127,7 @@ dmypy.json
 *.sublime-project
 *.sublime-workspace
 *.vscode/
-Stream Segment Merger.code-workspace
+*.code-workspace
 
 # Project SPECIFIC
 CACHE/
