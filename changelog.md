@@ -2,7 +2,7 @@
 
 -----
 Version: 1.1.0
-Date: 10 February 2024
+Date: 12 February 2024
 
 Features:
 - Now processes raw segments in user defined location before merging.
