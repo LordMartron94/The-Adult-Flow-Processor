@@ -29,19 +29,19 @@ class SpritesheetHandler:
 				os.remove(file_path)
 
 
-	def create_spritesheet_from_video_file(self, video_file_path: str, video_duration: int, burn_timestamps: bool, output_image_path: str):
+	def create_spritesheet_from_video_file(self, video_file_path: Path, video_duration: int, burn_timestamps: bool, output_image_path: Path):
 		self._sprite_handler.create_sprites_from_video_file(video_file_path, video_duration, burn_timestamps)
 
 		cmd = [
 			"ffmpeg",
 			"-y",
 			"-i",
-			f"{Path(self._image_cache_path)}/image%02d.png",
+			f"{self._image_cache_path}/image%02d.png",
 			"-vf",
 			"scale=317:-1,tile=8x7:color=0x333333:margin=2:padding=2,scale=2560:-1",
 			"-q:v",
 			"3",
-			f"{Path(output_image_path)}"
+			f"{output_image_path}"
 		]
 
 		self._command_helper.execute_command(cmd)

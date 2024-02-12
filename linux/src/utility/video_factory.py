@@ -16,14 +16,14 @@ class VideoFactory:
 			start_date = self._file_parser.extract_datetime(video_path.name)
 			end_date = start_date + timedelta(seconds=self._api.get_video_duration(video_path))
 
-			video: VideoModel = VideoModel(model_name, start_date, end_date)
+			video: VideoModel = VideoModel(model_name, start_date, end_date, video_path)
 			return video
 
-	def create_stream(self, model_name: str, video_one_path: Path, video_two_path: Path) -> VideoModel:
-			start_date = self._file_parser.extract_datetime(video_one_path.name)
+	# def create_stream(self, model_name: str, video_one_path: Path, video_two_path: Path) -> VideoModel:
+	# 		start_date = self._file_parser.extract_datetime(video_one_path.name)
 
-			start_vid_two = self._file_parser.extract_datetime(video_two_path.name)
-			end_date = start_vid_two + timedelta(seconds=self._api.get_video_duration(video_two_path))
+	# 		start_vid_two = self._file_parser.extract_datetime(video_two_path.name)
+	# 		end_date = start_vid_two + timedelta(seconds=self._api.get_video_duration(video_two_path))
 
-			video: VideoModel = VideoModel(model_name, start_date, end_date)
-			return video
+	# 		video: VideoModel = VideoModel(model_name, start_date, end_date)
+	# 		return video

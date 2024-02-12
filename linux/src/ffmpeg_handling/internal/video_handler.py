@@ -35,7 +35,7 @@ class VideoHandler:
 
     
     def merge_stream_segments(self, segments: list[str], output_file_path: str) -> bool:
-        with open(DATA_STREAM_PATH, 'w') as data_stream_file:
+        with open(DATA_STREAM_PATH, 'w+') as data_stream_file:
             for file_path in segments:
                 data_stream_file.write(f"file \'file:{Path(file_path)}\'\n")
 
@@ -72,4 +72,22 @@ class VideoHandler:
             ]
 
         results: CompletedProcess = self._command_helper.execute_command(cmd)
-        return results.returncode == 0        
+        return results.returncode == 0 
+    
+    def remux_video(self, input_video_path: Path, output_extension: str=".mp4"):
+        remux_command = [
+            "ffmpeg",
+            "-i",
+            str(input_video_path),
+            "-c:v",
+            "copy",
+            "-movflags",
+            "faststart",
+            "-y",
+            "-f",
+            "mp4",
+            str(input_video_path) + output_extension
+        ]
+
+        results: CompletedProcess = self._command_helper.execute_command(remux_command)
+        return results.returncode == 0
