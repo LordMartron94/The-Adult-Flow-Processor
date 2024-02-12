@@ -26,18 +26,18 @@ class SegmentMover:
 			video: VideoModel = self._video_factory.create(model_name, segment)
 			return self._template_parser.get_video_name(video) + ".mp4"
 
-	def move(self, segment: Path, output_directory: Path, model_name: str):
+	def move(self, segment: VideoModel, output_directory: Path):
 		if not Path(output_directory).is_dir():
 			os.makedirs(output_directory, exist_ok=True)
 
 		contact_sheet: Path = self._video_handler.get_accompanying_contact_sheet_path(segment)
 
 		try:
-			print(f"Moving '{segment.name}' to 'Couldn't MERGE' directory.")
+			print(f"Moving '{segment.path.name}' to 'Couldn't MERGE' directory.")
 
-			segment_name: str = self._rename(segment, model_name)
+			segment_name: str = self._rename(segment.path, segment.model_name)
 			segment_path: Path = Path(output_directory, segment_name)
-			shutil.move(segment, segment_path)
+			shutil.move(segment.path, segment_path)
 
 			if not REGEN_SHEETS:
 				if Path(contact_sheet).exists() and Path(contact_sheet).is_file():
@@ -47,7 +47,31 @@ class SegmentMover:
 					os.remove(contact_sheet)
 				self._api.create_contact_sheet_for_video(segment_path, BURN, str(segment_path).replace('.mp4', '.png'))
 
-			print(f"Moved '{segment.name}' to 'Couldn't MERGE' directory.")
+			print(f"Moved '{segment.path.name}' to 'Couldn't MERGE' directory.")
 		except Exception as e:
-			print(f"Error while moving file '{segment.name}' to 'Couldn't MERGE' directory: {e}")
+			print(f"Error while moving file '{segment.path.name}' to 'Couldn't MERGE' directory: {e}")
 			raise e
+		
+	def move_raw(self, segment: VideoModel, output_directory: Path):
+		if not Path(output_directory).is_dir():
+			os.makedirs(output_directory, exist_ok=True)
+
+		try:
+			print(f"Moving '{segment.path.name}' to 'Couldn't MERGE' directory.")
+
+			shutil.move(segment.path, Path(output_directory, segment.path.name))
+
+			print(f"Moved '{segment.path.name}' to 'Couldn't MERGE' directory.")
+		except Exception as e:
+			print(f"Error while moving file '{segment.path.name}' to 'Couldn't MERGE' directory: {e}")
+			raise e
+		
+	def move_path_based(self, segment_path: Path, output_dir: Path, model_name: str):
+		"""Moves the segment based on paths instead of models. Useful for adapting to other APIs."""
+		video: VideoModel = self._video_factory.create(model_name, segment_path)
+		self.move(video, output_dir)
+
+	def move_path_based_raw(self, segment_path: Path, output_dir: Path, model_name: str):
+		"""Moves the segment based on paths instead of models. Useful for adapting to other APIs."""
+		video: VideoModel = self._video_factory.create(model_name, segment_path)
+		self.move_raw(video, output_dir)

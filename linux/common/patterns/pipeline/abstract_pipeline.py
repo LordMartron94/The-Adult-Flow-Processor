@@ -4,11 +4,11 @@ from typing import Any, List
 from common.patterns.pipeline.pipe import IPipe
 
 
-class AbstractPipeline(ABC):
+class AbPipeline(ABC):
     def __init__(self):
         self._pipes: List[IPipe] = []
 
-    def add_step(self, step: IPipe):
+    def _add_step(self, step: IPipe):
         self._pipes.append(step)
 
     def flow(self, data: Any):
