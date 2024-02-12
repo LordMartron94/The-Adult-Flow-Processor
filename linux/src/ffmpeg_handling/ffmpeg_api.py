@@ -18,10 +18,10 @@ class FFMPEGAPI:
 
 	def merge_videos_together(
 			self,
-			video_paths_in_sequence: list[str],
+			video_paths_in_sequence: list[Path],
 			delete_original_files: bool,
-			output_file_path: str,
-			fail_function: Callable[[List[str], str, str], None],
+			output_file_path: Path,
+			fail_function: Callable[[List[Path], Path, str], None],
 			model_name: str):
 		merge_successful: bool = self._video_handler.merge_stream_segments(video_paths_in_sequence, output_file_path)
 		
@@ -36,9 +36,9 @@ class FFMPEGAPI:
 
 	def create_contact_sheet_for_video(
 			self, 			
-			video_file_path: str, 
+			video_file_path: Path, 
 			burn_time_stamps_into_sheet: bool,
-			output_image_path: str):
+			output_image_path: Path):
 		video_duration = self._video_handler.get_video_duration(video_file_path)
 		self._spritesheet_handler.create_spritesheet_from_video_file(
 			video_file_path, 
@@ -56,3 +56,6 @@ class FFMPEGAPI:
 		Set robust_check to True if you want a more time consuming but robust video check.
 		"""
 		return self._video_handler.video_valid(video_file_path, robust_check)
+	
+	def remux_video(self, input_video_path: Path, output_extension: str=".mp4") -> bool:
+		return self._video_handler.remux_video(input_video_path, output_extension)
