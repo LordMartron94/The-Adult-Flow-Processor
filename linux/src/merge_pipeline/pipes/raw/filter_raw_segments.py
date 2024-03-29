@@ -1,8 +1,9 @@
+import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List
 from common.patterns.pipeline.pipe import IPipe
-from constants import DEBUGGING, MIN_SEGMENT_AGE_FOR_POST_PROCESS
+from constants import DEBUGGING, MIN_SEGMENT_AGE_FOR_POST_PROCESS, DELETE_CORRUPT_VIDEOS
 from src.model.video_model import VideoModel
 from src.merge_pipeline.merge_component_context import MergeComponentContext
 
@@ -25,6 +26,10 @@ class FilterRawSegments(IPipe):
 
 			for segment in model_segments:
 				segment_entity: VideoModel = video_factory.create(model_name, segment)
+
+				if segment_entity.start_date == segment_entity.end_date:
+					if DELETE_CORRUPT_VIDEOS:
+						os.remove(segment_entity.path)
 
 				time_diff = datetime.now() - segment_entity.start_date
 

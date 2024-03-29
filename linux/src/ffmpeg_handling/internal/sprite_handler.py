@@ -51,6 +51,10 @@ class SpriteHandler:
 			self._command_helper.execute_command(cmd)
 
 	def _create_sprites_with_burn(self, video_file_path: str, video_duration: int):
+		if video_duration is None:
+			print("Error with spritesheet creation, skipping!")
+			return
+
 		for i in range(1, 57):
 			interval = int((i - 0.5) * video_duration / 56)
 
@@ -59,7 +63,7 @@ class SpriteHandler:
 			tmp_image_path = Path(self._image_cache_path, f'image{i:02d}.png')
 
 			if not Path(video_file_path).is_file():
-				print("ERROR! Path is not a file or not existen!!!")
+				print("ERROR! Path is not a file or not existent!!!")
 				return
 
 			cmd = [
@@ -72,7 +76,8 @@ class SpriteHandler:
 				"-i",
 				f"{Path(video_file_path)}",
 				"-vf",
-				f"scale=1920:-1,select='eq(pict_type,I)',drawtext='text={ttext}:fontcolor=white:fontsize=156:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h-10)'",
+				f"scale=1920:-1,select='eq(pict_type,I)',drawtext='text={ttext}:fontcolor=white:fontsize=156"
+				f":fontfile=C\\:/Windows/Fonts/arial.ttf:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h-10)'",
 				"-vframes",
 				"1",
 				f"{tmp_image_path}"
