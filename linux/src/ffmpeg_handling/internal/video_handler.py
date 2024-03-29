@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from subprocess import CompletedProcess
 from typing import Union
-from constants import DATA_STREAM_PATH, SHOW_MERGE_COMMANDS
+from constants import DATA_STREAM_PATH, SHOW_MERGE_COMMANDS, DELETE_CORRUPT_VIDEOS
 
 from src.ffmpeg_handling.internal.ffmpeg_command_helper import FFMPEGCommandHelper
 
@@ -30,8 +30,8 @@ class VideoHandler:
         output = self._command_helper.execute_command(command)
         try:
             return float(output.stdout)
-        except ValueError: # Invalid output, corrupt video!            
-            return None
+        except ValueError: # Invalid output, corrupt video!
+            print(f"Error when getting video duration: {output.stderr}")
 
     
     def merge_stream_segments(self, segments: list[str], output_file_path: str) -> bool:

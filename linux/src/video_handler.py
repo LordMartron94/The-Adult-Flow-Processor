@@ -51,7 +51,7 @@ class VideoHandler:
         base_name, _ = os.path.splitext(file_name)
         base_name_without_ms = base_name[:-7]
 
-        contact_sheet_path = Path(_directory_path, f"{base_name_without_ms}_contactsheet.jpg")
+        contact_sheet_path = Path(_directory_path, f"{base_name_without_ms}__contactsheet.jpg")
         return contact_sheet_path
     
     def delete_spritesheet_for_video(self, video_model: Union[VideoModel, StreamModel]):
