@@ -39,11 +39,16 @@ class FFMPEGAPI:
 			video_file_path: Path, 
 			burn_time_stamps_into_sheet: bool,
 			output_image_path: Path):
-		video_duration = self._video_handler.get_video_duration(video_file_path)
+		try:
+			video_duration = self._video_handler.get_video_duration(video_file_path)
+		except Exception as e:
+			print(f"Error when getting video duration: {e}")
+			return
+
 		self._spritesheet_handler.create_spritesheet_from_video_file(
-			video_file_path, 
-			video_duration, 
-			burn_time_stamps_into_sheet, 
+			video_file_path,
+			video_duration,
+			burn_time_stamps_into_sheet,
 			output_image_path
 		)
 

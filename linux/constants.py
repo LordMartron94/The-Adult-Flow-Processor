@@ -21,12 +21,12 @@ MODEL_SORTING_ALGORITHM = "${oldest}"  # The algorithm with which the processor 
 									   # Default: ${oldest}, others: ${alphabetical}, ${alphabetical_reversed}
 
 # ---- PATHS ----
-DATA_STREAM_PATH: str = "/mnt/nas/5TB WD External/Media Library/Porn/Porn Utilities/The Adult Flow Processor/linux/CACHE/data_stream.txt"
+DATA_STREAM_PATH: str = "Y:/Media Library/Porn/Porn Utilities/The Adult Flow Processor/linux/CACHE/data_stream.txt"
 
-ORIGINAL_LOCATION_PATH_RAW: str = "/media/mr-hoorn/Seagate External (HDD) [3.7TB]/Porn Streaming Cache/1. Recording"
-ORIGINAL_LOCATION_PATH: str = "/media/mr-hoorn/Seagate External (HDD) [3.7TB]/Porn Streaming Cache/2. Recordings Triage"
+ORIGINAL_LOCATION_PATH_RAW: str = "V:/CTBREC/1. Recording"
+ORIGINAL_LOCATION_PATH: str = "V:/CTBREC/2. Recordings Triage"
 # FINAL_DESTINATION_ROOT: str = "/mnt/nas/5TB WD External/Media Library/Porn/Utility Tests/"  # Test version, leave commented!
-FINAL_DESTINATION_ROOT: str = "/mnt/nas/5TB WD External/Media Library/Porn/VIDEO"
+FINAL_DESTINATION_ROOT: str = "Y:/Media Library/Porn/VIDEO"
 
 FINAL_DIRECTORY_STRUCTURE: str = "Streaming (Cam4, Stripchat, etc.)/${model_name}/${year}/${month}/${day}"
 MERGE_NAME_TEMPLATE: str = "${model_name}, START ${start_date}, END ${end_date}"

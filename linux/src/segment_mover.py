@@ -33,7 +33,7 @@ class SegmentMover:
 		contact_sheet: Path = self._video_handler.get_accompanying_contact_sheet_path(segment)
 
 		try:
-			print(f"Moving '{segment.path.name}' to 'Couldn't MERGE' directory.")
+			print(f"Moving '{segment.path.name}' to '{output_directory}' directory.")
 
 			segment_name: str = self._rename(segment.path, segment.model_name)
 			segment_path: Path = Path(output_directory, segment_name)
@@ -47,23 +47,27 @@ class SegmentMover:
 					os.remove(contact_sheet)
 				self._api.create_contact_sheet_for_video(segment_path, BURN, str(segment_path).replace('.mp4', '.png'))
 
-			print(f"Moved '{segment.path.name}' to 'Couldn't MERGE' directory.")
+			print(f"Moved '{segment.path.name}' to '{output_directory}' directory.")
 		except Exception as e:
-			print(f"Error while moving file '{segment.path.name}' to 'Couldn't MERGE' directory: {e}")
+			print(f"Error while moving file '{segment.path.name}' to '{output_directory}' directory: {e}")
 			raise e
 		
 	def move_raw(self, segment: VideoModel, output_directory: Path):
 		if not Path(output_directory).is_dir():
 			os.makedirs(output_directory, exist_ok=True)
 
+		if not Path(segment.path).is_file():
+			print("File does not exist: " + segment.path.name)
+			return
+
 		try:
-			print(f"Moving '{segment.path.name}' to 'Couldn't MERGE' directory.")
+			print(f"Moving '{segment.path.name}' to '{output_directory}' directory.")
 
 			shutil.move(segment.path, Path(output_directory, segment.path.name))
 
-			print(f"Moved '{segment.path.name}' to 'Couldn't MERGE' directory.")
+			print(f"Moved '{segment.path.name}' to '{output_directory}' directory.")
 		except Exception as e:
-			print(f"Error while moving file '{segment.path.name}' to 'Couldn't MERGE' directory: {e}")
+			print(f"Error while moving file '{segment.path.name}' to '{output_directory}' directory: {e}")
 			raise e
 		
 	def move_path_based(self, segment_path: Path, output_dir: Path, model_name: str):
